@@ -25,7 +25,7 @@
 	    @FXML
 	    void goToRegistroMenu(ActionEvent event) {
 	    	Main.loadScene("/view/Registro.fxml");
-	
+
 	    }
 	
 	}
