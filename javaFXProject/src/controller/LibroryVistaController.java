@@ -1,7 +1,11 @@
 package controller;
 
+import java.sql.Connection;
+
 import application.Main;
+import data.BookDAO;
 import data.BookDataManager;
+import data.DatabaseConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -21,7 +25,7 @@ public class LibroryVistaController {
     private TableView<Book> TableView1;
 
     @FXML
-    private Button btnMenup;
+    private Button btnMenup, Elimibook;
     
     @FXML
     private TableColumn<Book, String> colAutor;
@@ -35,14 +39,17 @@ public class LibroryVistaController {
     @FXML
     private TableColumn<Book, Integer> colYear;
     
-    private BookDataManager BookManager = BookDataManager.getInstance();
+    // Singleton Connection
+ 	private Connection connection = DatabaseConnection.getInstance().getConnection();
+ 	// BookDAO Instance
+ 	private BookDAO bookDAO = new BookDAO(connection);
 
     @FXML
     public void initialize() {
     	
     	ObservableList<Book> books = FXCollections.observableArrayList();
     	
-    	for (Book book:BookManager.getBooks()) {
+    	for (Book book:bookDAO.fetch()) {
     		if (book.isDisponible()) {
     			books.add(book);
     		}
@@ -53,6 +60,13 @@ public class LibroryVistaController {
 		colISBN.setCellValueFactory(new PropertyValueFactory<>("ISBN"));
 		colYear.setCellValueFactory(new PropertyValueFactory<>("año"));
 		TableView1.setItems(books);
+    }
+    
+    @FXML
+    public void BorrarBook(ActionEvent event) {
+    	Book book = TableView1.getSelectionModel().getSelectedItem();
+    	bookDAO.delete(book.getISBN());
+    	initialize();
     }
     
     @FXML
