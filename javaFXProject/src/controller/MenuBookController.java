@@ -53,7 +53,7 @@ public class MenuBookController {
 		String isbnStr = txtISBN.getText().trim();
 		boolean disponible = chkAvailability.isSelected();
 
-		if (titulo.isEmpty() || autor.isEmpty() || añoStr.isEmpty() || isbnStr.isEmpty()) {
+		if ((titulo.isEmpty() || autor.isEmpty()) || (añoStr.isEmpty() || isbnStr.isEmpty())) {
 			mostrarAlerta("Error", "Campos vacíos", "Por favor, complete todos los campos.");
 			return;
 		}
