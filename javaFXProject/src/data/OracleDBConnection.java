@@ -12,115 +12,106 @@ import model.Book;
 import model.User;
 
 public class OracleDBConnection {
-	private final String username="ajerez";
-	private final String password="4j3r3z";
+	private final String username = "ajerez";
+	private final String password = "4j3r3z";
 	private final String host = "192.168.254.215";
 	private final String port = "1521";
 	private final String service = "orcl";
 
+	// Method to fetch books from the database
+	public ArrayList<Book> fetchBooks() throws SQLException {
+		ArrayList<Book> books = new ArrayList<>();
+		String query = "SELECT Title, Author, ISBN, Year, Available FROM Book";
 
-    
-    // Method to fetch books from the database
-    public ArrayList<Book> fetchBooks() throws SQLException {
-        ArrayList<Book> books = new ArrayList<>();
-        String query = "SELECT Title, Author, ISBN, Year, Available FROM Book";
-        
-        try (Connection conn = DriverManager.getConnection(getConnectionString(), username, password);
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
-            
-            while (rs.next()) {
-                String title = rs.getString("Title");
-                String author = rs.getString("Author");
-                long isbn = rs.getLong("ISBN");
-                int year = rs.getInt("Year");
-                boolean available = rs.getBoolean("Available");
-                
-                Book book = new Book(title, author, isbn, year, available);
-                books.add(book);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new SQLException("Error fetching books from the database.");
-        }
+		try (Connection conn = DriverManager.getConnection(getConnectionString(), username, password);
+				Statement stmt = conn.createStatement();
+				ResultSet rs = stmt.executeQuery(query)) {
 
-        return books;
-    }
-    
-    
-    // Method to fetch users from the database
-    public ArrayList<User> fetchUsers() throws SQLException {
-        ArrayList<User> users = new ArrayList<>();
-        String query = "SELECT nickname, password FROM UserAdmin";       
-        try (Connection conn = DriverManager.getConnection(getConnectionString(), username, password);
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
-            
-            while (rs.next()) {
-                String userName = rs.getString("nickname");
-                String password = rs.getString("password");
-                
-                User user = new User(userName, password);
-                users.add(user);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new SQLException("Error fetching users from the database.");
-        }
+			while (rs.next()) {
+				String title = rs.getString("Title");
+				String author = rs.getString("Author");
+				long isbn = rs.getLong("ISBN");
+				int year = rs.getInt("Year");
+				boolean available = rs.getBoolean("Available");
 
-        return users;
-    }
-    
-    // Method to insert a new book into the database
-    public void insertBook(Book book) throws SQLException {
-        String query = "INSERT INTO Book (Title, Author, ISBN, Year, Available) VALUES (?, ?, ?, ?, ?)";
+				Book book = new Book(title, author, isbn, year, available);
+				books.add(book);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new SQLException("Error fetching books from the database.");
+		}
+		return books;
+	}
 
-        try (Connection conn = DriverManager.getConnection(getConnectionString(), username, password);
-             PreparedStatement pstmt = conn.prepareStatement(query)) {
-        	
+	// Method to fetch users from the database
+	public ArrayList<User> fetchUsers() throws SQLException {
+		ArrayList<User> users = new ArrayList<>();
+		String query = "SELECT nickname, password FROM UserAdmin";
+		try (Connection conn = DriverManager.getConnection(getConnectionString(), username, password);
+				Statement stmt = conn.createStatement();
+				ResultSet rs = stmt.executeQuery(query)) {
 
-            pstmt.setString(1, book.getTitulo());
-            pstmt.setString(2, book.getAutor());
-            pstmt.setLong(3, book.getISBN());
-            pstmt.setInt(4, book.getAño());
-            pstmt.setBoolean(5, book.isDisponible());
+			while (rs.next()) {
+				String userName = rs.getString("nickname");
+				String password = rs.getString("password");
 
-            int rowsAffected = pstmt.executeUpdate();
-            if (rowsAffected > 0) {
-                System.out.println("Book inserted successfully.");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new SQLException("Error inserting book into the database.");
-        }
-    }
-    
-    
- // Method to insert a new user into the database
-    public void insertUser(User user) throws SQLException {
-        String query = "INSERT INTO UserAdmin (Nickname, Password) VALUES (?, ?)";
+				User user = new User(userName, password);
+				users.add(user);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new SQLException("Error fetching users from the database.");
+		}
 
-        try (Connection conn = DriverManager.getConnection(getConnectionString(), username, password);
-             PreparedStatement pstmt = conn.prepareStatement(query)) {
-            
-            pstmt.setString(1, user.getNombreUsuario());
-            pstmt.setString(2, user.getContraseña());
+		return users;
+	}
 
-            int rowsAffected = pstmt.executeUpdate();
-            if (rowsAffected > 0) {
-                System.out.println("User inserted successfully.");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new SQLException("Error inserting user into the database.");
-        }
-    }
-    
+	// Method to insert a new book into the database
+	public void insertBook(Book book) throws SQLException {
+		String query = "INSERT INTO Book (Title, Author, ISBN, Year, Available) VALUES (?, ?, ?, ?, ?)";
+
+		try (Connection conn = DriverManager.getConnection(getConnectionString(), username, password);
+				PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+			pstmt.setString(1, book.getTitulo());
+			pstmt.setString(2, book.getAutor());
+			pstmt.setLong(3, book.getISBN());
+			pstmt.setInt(4, book.getAño());
+			pstmt.setBoolean(5, book.isDisponible());
+
+			int rowsAffected = pstmt.executeUpdate();
+			if (rowsAffected > 0) {
+				System.out.println("Book inserted successfully.");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new SQLException("Error inserting book into the database.");
+		}
+	}
+
+	// Method to insert a new user into the database
+	public void insertUser(User user) throws SQLException {
+		String query = "INSERT INTO UserAdmin (Nickname, Password) VALUES (?, ?)";
+
+		try (Connection conn = DriverManager.getConnection(getConnectionString(), username, password);
+				PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+			pstmt.setString(1, user.getNombreUsuario());
+			pstmt.setString(2, user.getContraseña());
+
+			int rowsAffected = pstmt.executeUpdate();
+			if (rowsAffected > 0) {
+				System.out.println("User inserted successfully.");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new SQLException("Error inserting user into the database.");
+		}
+	}
+
 	public String getConnectionString() {
 		return String.format("jdbc:oracle:thin:@%s:%s:%s", this.host, this.port, this.service);
 	}
-	
-	
+
 }
-
-
