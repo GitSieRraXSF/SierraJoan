@@ -4,7 +4,6 @@ import java.sql.Connection;
 
 import application.Main;
 import data.BookDAO;
-import data.BookDataManager;
 import data.DatabaseConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
