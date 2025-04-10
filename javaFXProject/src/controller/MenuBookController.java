@@ -72,12 +72,17 @@ public class MenuBookController {
 				return;
 			}
 
-			for (Book book : bookDAO.fetch()) {
-				if (book.getISBN() == ISBN) {
-					mostrarAlerta("Error", "ISBN repetido", "El ISBN ya está registrado.");
-					return;
-				}
+			if (bookDAO.authenticate(ISBN)) {
+				mostrarAlerta("Error", "ISBN repetido", "El ISBN ya está registrado.");
+				return;
 			}
+
+//			for (Book book : bookDAO.fetch()) {
+//				if (book.getISBN() == ISBN) {
+//					mostrarAlerta("Error", "ISBN repetido", "El ISBN ya está registrado.");
+//					return;
+//				}
+//			}
 
 			Book book = new Book(titulo, autor, ISBN, año, disponible);
 			bookDAO.save(book);

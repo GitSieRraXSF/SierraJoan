@@ -15,5 +15,11 @@ public interface CRUD_Operation<S, T> {
 
 	// D: Delete
 	void delete(T id);
+	
+	//Auntenticador
+	boolean authenticate(T id);
+	
+	// S: SoftDelete
+	void softDelete(T id);
 
 }

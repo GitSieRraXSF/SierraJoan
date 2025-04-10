@@ -77,4 +77,30 @@ public class BookDAO implements CRUD_Operation<Book, Long> {
 			e.printStackTrace();
 		}
 	}
+
+	@Override
+	public boolean authenticate(Long ISBN) {
+		String sql = "SELECT ISBN FROM Book WHERE ISBN=?";
+		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setLong(1, ISBN);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				return rs.getLong("ISBN") == ISBN;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
+	public void softDelete(Long ISBN) {
+		String sql = "UPDATE Book SET is_deleted = 1 WHERE ISBN = ?";
+		try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+			pstmt.setLong(1, ISBN);
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }
