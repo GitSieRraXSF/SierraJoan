@@ -119,5 +119,4 @@ public class MenuBookController {
 		txtISBN.clear();
 		chkAvailability.setSelected(false);
 	}
-
 }

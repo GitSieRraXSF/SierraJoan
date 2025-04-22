@@ -1,2 +1,6 @@
-/data/
+/application/
 /controller/
+/data/
+/model/
+/module-info.class
+/view/

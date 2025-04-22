@@ -15,7 +15,6 @@ public class BookDAO implements CRUD_Operation<Book, Long> {
 
 	public BookDAO(Connection connection, BookDAO bookDAO) {
 		this.connection = connection;
-
 	}
 
 	public BookDAO(Connection connection) {
